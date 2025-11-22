@@ -2,6 +2,7 @@ if !has('nvim')
 	import autoload 'tpipeline/parse.vim'
 endif
 
+let s:deferred_timer_id = 0
 let s:exit_code = -1
 
 func tpipeline#get_filepath()
@@ -33,6 +34,8 @@ func tpipeline#build_hooks()
 		if g:tpipeline_cursormoved
 			au CursorMoved * call tpipeline#update()
 		endif
+        au BufWritePost,RecordingEnter,RecordingLeave * call tpipeline#update()
+        au DiagnosticChanged * call tpipeline#update()
 
 		if empty(g:tpipeline_statusline) && !g:tpipeline_tabline
 			if tpipeline#lualine#is_lualine()
